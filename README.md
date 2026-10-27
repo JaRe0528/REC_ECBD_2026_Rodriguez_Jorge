@@ -36,6 +36,7 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 | `sql/01_crear_datamart.sql` | Crea el Data Mart `DM_Abalone` (esquema estrella: `Dim_Sexo`, `Dim_Grupo_Edad`, `Fact_Abulon`) |
 | `sql/02_cargar_datamart.sql` | Carga el CSV procesado al Data Mart |
 | `sql/03_consultas_validacion.sql` | Consultas de validación |
+| `docs/figuras/11_*`, `12_*`, `13_*` | Evidencias de ejecución en SQL Server 2025 Express (4,169 registros cargados en `Fact_Abulon`) |
 
 ## Unidad III — Análisis supervisado
 | Archivo | Contenido |
@@ -68,7 +69,7 @@ Después abrir los notebooks en VS Code (kernel `.venv`) y ejecutarlos en orden 
 ## Avance
 - [x] Actividad 0 — Inicio y registro
 - [x] Unidad I — Planeación del proyecto
-- [x] Unidad II — Preparación de datos (notebooks 01–03 y Data Mart)
+- [x] Unidad II — Preparación de datos (notebooks 01–03 y Data Mart probado en SQL Server)
 - [ ] Unidad III — Análisis supervisado (modelos funcionando; falta informe)
 - [ ] Unidad IV — Análisis no supervisado
 - [ ] Unidad V — Presentación y visualización

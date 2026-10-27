@@ -1,0 +1,10 @@
+﻿Variable,Tipo,Unidad,Rol,Descripción,Rango observado,Nulos,Valores únicos
+Sex,Categórica nominal,—,Predictora,"Sexo: M = macho, F = hembra, I = infante",F – M,0,3
+Length,Numérica continua,mm (/200),Predictora,Medida más larga de la concha,0.075 – 0.815,0,134
+Diameter,Numérica continua,mm (/200),Predictora,Medida perpendicular al largo,0.055 – 0.65,0,111
+Height,Numérica continua,mm (/200),Predictora,Altura con la carne dentro de la concha,0.0 – 1.13,0,51
+Whole_weight,Numérica continua,g (/200),Predictora,Peso del abulón completo,0.002 – 2.8255,0,2429
+Shucked_weight,Numérica continua,g (/200),Predictora,Peso de la carne,0.001 – 1.488,0,1515
+Viscera_weight,Numérica continua,g (/200),Predictora,Peso de las vísceras (después de desangrar),0.0005 – 0.76,0,880
+Shell_weight,Numérica continua,g (/200),Predictora,Peso de la concha seca,0.0015 – 1.005,0,926
+Rings,Numérica entera,anillos,Objetivo,Número de anillos; edad ≈ Rings + 1.5 años,1 – 29,0,28

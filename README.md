@@ -27,6 +27,24 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 - **No supervisado:** K-Means + PCA sobre las medidas físicas.
 - **Entregas:** los documentos de cada unidad se guardan en `docs/`.
 
+## Unidad II — Preparación de datos
+| Archivo | Contenido |
+|---|---|
+| `notebooks/01_carga_y_diccionario.ipynb` | Carga del dataset y diccionario de datos (`docs/diccionario_datos.csv`) |
+| `notebooks/02_analisis_exploratorio.ipynb` | EDA: estadísticas, gráficas (`docs/figuras/`), atípicos y correlaciones |
+| `notebooks/03_limpieza_etl.ipynb` | ETL: elimina 8 registros físicamente imposibles, crea unidades reales, `Edad_anios`, `Grupo_Edad` e ID → `data/processed/abalone_limpio.csv` (4,169 registros) |
+| `sql/01_crear_datamart.sql` | Crea el Data Mart `DM_Abalone` (esquema estrella: `Dim_Sexo`, `Dim_Grupo_Edad`, `Fact_Abulon`) |
+| `sql/02_cargar_datamart.sql` | Carga el CSV procesado al Data Mart |
+| `sql/03_consultas_validacion.sql` | Consultas de validación |
+
+## Cómo ejecutar el proyecto
+```
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+Después abrir los notebooks en VS Code (kernel `.venv`) y ejecutarlos en orden 01 → 02 → 03. Para el Data Mart, ejecutar los scripts de `sql/` en SQL Server Management Studio en orden 01 → 02 → 03.
+
 ## Estructura del repositorio
 - `data/raw/` — datos originales sin modificar
 - `data/processed/` — datos limpios y transformados
@@ -40,7 +58,7 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 ## Avance
 - [x] Actividad 0 — Inicio y registro
 - [x] Unidad I — Planeación del proyecto
-- [ ] Unidad II — Preparación de datos
+- [x] Unidad II — Preparación de datos (notebooks 01–03 y Data Mart)
 - [ ] Unidad III — Análisis supervisado
 - [ ] Unidad IV — Análisis no supervisado
 - [ ] Unidad V — Presentación y visualización

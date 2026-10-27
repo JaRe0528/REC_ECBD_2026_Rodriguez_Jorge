@@ -1,0 +1,4 @@
+﻿Modelo,MAE,RMSE,R²
+Regresión lineal,1.517,2.11,0.616
+Árbol de decisión,1.664,2.387,0.509
+Random Forest,1.493,2.132,0.609

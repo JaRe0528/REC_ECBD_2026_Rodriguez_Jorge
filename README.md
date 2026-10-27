@@ -37,6 +37,16 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 | `sql/02_cargar_datamart.sql` | Carga el CSV procesado al Data Mart |
 | `sql/03_consultas_validacion.sql` | Consultas de validación |
 
+## Unidad III — Análisis supervisado
+| Archivo | Contenido |
+|---|---|
+| `notebooks/04_regresion.ipynb` | Predice `Rings` con regresión lineal, árbol de decisión y Random Forest; optimización con GridSearchCV |
+| `notebooks/05_clasificacion.ipynb` | Clasifica `Grupo_Edad` con regresión logística, KNN y Random Forest; matriz de confusión |
+| `docs/metricas_regresion.csv`, `docs/metricas_clasificacion.csv` | Métricas de comparación |
+| `modelos/*.joblib` | Modelos optimizados guardados |
+
+**Resultados principales:** regresión → Random Forest optimizado con MAE ≈ 1.49 anillos y R² ≈ 0.61 (baseline MAE ≈ 2.52). Clasificación → exactitud ≈ 64% (azar = 33%); la clase Adulto es la más difícil.
+
 ## Cómo ejecutar el proyecto
 ```
 python -m venv .venv
@@ -59,6 +69,6 @@ Después abrir los notebooks en VS Code (kernel `.venv`) y ejecutarlos en orden 
 - [x] Actividad 0 — Inicio y registro
 - [x] Unidad I — Planeación del proyecto
 - [x] Unidad II — Preparación de datos (notebooks 01–03 y Data Mart)
-- [ ] Unidad III — Análisis supervisado
+- [ ] Unidad III — Análisis supervisado (modelos funcionando; falta informe)
 - [ ] Unidad IV — Análisis no supervisado
 - [ ] Unidad V — Presentación y visualización

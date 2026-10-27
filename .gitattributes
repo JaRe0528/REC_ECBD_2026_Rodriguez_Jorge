@@ -1,0 +1,2 @@
+# Mantener los CSV con saltos de linea LF (necesario para BULK INSERT en SQL Server)
+*.csv text eol=lf

@@ -2,7 +2,8 @@
    Unidad II - Carga del Data Mart (la "L" del ETL)
    Requisito: haber ejecutado antes 01_crear_datamart.sql
 
-   ⚠️ CAMBIA la ruta del archivo por la de tu computadora.
+   ⚠️ Antes de ejecutar, copia data/processed/abalone_limpio.csv a C:\datos\
+      (SQL Server no tiene permiso de leer archivos dentro de C:\Users).
    ===================================================================== */
 USE DM_Abalone;
 GO
@@ -12,7 +13,7 @@ DELETE FROM dbo.Fact_Abulon;
 
 -- 1) Cargar el CSV limpio a la tabla staging
 BULK INSERT dbo.Stg_Abalone
-FROM 'C:\Users\Jorge\REC_ECBD_2026_Rodriguez_Jorge\data\processed\abalone_limpio.csv'
+FROM 'C:\datos\abalone_limpio.csv'   -- copia del archivo de data/processed
 WITH (
     FORMAT = 'CSV',
     FIRSTROW = 2,            -- la fila 1 son los encabezados
@@ -35,7 +36,7 @@ SELECT
     s.Rings, s.Edad_anios
 FROM dbo.Stg_Abalone s
 JOIN dbo.Dim_Sexo       ds ON ds.Codigo = s.Sex
-JOIN dbo.Dim_Grupo_Edad dg ON dg.Grupo  = s.Grupo_Edad;
+JOIN dbo.Dim_Grupo_Edad dg ON dg.Grupo  = REPLACE(s.Grupo_Edad, CHAR(13), '');  -- quita un posible salto de linea de Windows
 GO
 
 -- 3) Validación: deben ser 4,169 registros

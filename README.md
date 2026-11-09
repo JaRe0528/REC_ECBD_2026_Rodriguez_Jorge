@@ -27,6 +27,15 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 - **No supervisado:** K-Means + PCA sobre las medidas físicas.
 - **Entregas:** los documentos de cada unidad se guardan en `docs/`.
 
+## Unidad II — Actividad de Evaluación 1: Exploración y diagnóstico
+| Archivo | Contenido |
+|---|---|
+| `notebooks/Rodriguez_Enriquez_Jorge_Alberto_U2_AE1_Exploracion.ipynb` | Carga, `head/shape/columns/info/dtypes/describe`, diccionario de datos, tipo y fuente, faltantes, duplicados, inconsistencias, estadística, boxplots, visualizaciones y propuestas de análisis (sin modificar los datos) |
+| `docs/Rodriguez_Enriquez_Jorge_Alberto_U2_AE1_Diagnostico.pdf` | Informe de diagnóstico |
+| `docs/figuras/ae1_*.png` | Gráficas generadas por el notebook |
+
+**Diagnóstico:** 4,177 registros, 9 variables, sin faltantes ni duplicados; menos del 0.3% de registros con valores físicamente imposibles (alturas en 0 o extremas, partes que pesan más que el total).
+
 ## Unidad II — Preparación de datos
 | Archivo | Contenido |
 |---|---|

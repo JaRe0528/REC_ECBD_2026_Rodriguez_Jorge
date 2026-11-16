@@ -57,6 +57,26 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 
 **Resultados principales:** regresión → Random Forest optimizado con MAE ≈ 1.49 anillos y R² ≈ 0.61 (baseline MAE ≈ 2.52). Clasificación → exactitud ≈ 64% (azar = 33%); la clase Adulto es la más difícil.
 
+## Unidad IV — Análisis no supervisado
+| Archivo | Contenido |
+|---|---|
+| `notebooks/06_no_supervisado.ipynb` | K-Means (método del codo y silueta, k = 3) y PCA; perfiles Pequeño / Mediano / Grande |
+| `notebooks/07_predicciones_dashboard.ipynb` | Predicciones de los modelos por abulón (marcando Entrenamiento / Prueba) para el dashboard |
+| `data/processed/abalone_clusters.csv`, `data/processed/abalone_predicciones.csv` | Resultados que se cargan al Data Warehouse |
+| `docs/metricas_clustering.csv`, `docs/perfiles_clusters.csv` | Métricas y perfiles |
+| `modelos/kmeans_pca.joblib` | Modelo K-Means + PCA guardado |
+
+**Resultados:** 3 perfiles morfológicos (silueta 0.44). Sin conocer la edad, el perfil Pequeño es 71% infantes y el Grande 58% maduros. PC1 (tamaño general) concentra el 92.5% de la información de las 7 medidas.
+
+## Data Mart y dashboard
+| Archivo | Contenido |
+|---|---|
+| `sql/04_cargar_resultados_modelos.sql` | Carga los resultados de los modelos (`Res_Cluster`, `Res_Prediccion`) al Data Warehouse |
+| `sql/05_vistas_datamart.sql` | **Data Mart** como vistas: `vw_DM_Abalone`, `vw_DM_Resumen_Perfil`, `vw_DM_Desempeno_Modelos` |
+| `dashboard/` | Plantilla de fondo, tema de colores y archivo de Power BI |
+
+**Orden de ejecución completo:** notebooks 01 → 07, luego en SSMS los scripts SQL 01 → 05, y por último Power BI conectado a `localhost\SQLEXPRESS` → `DM_Abalone`.
+
 ## Cómo ejecutar el proyecto
 ```
 python -m venv .venv
@@ -79,6 +99,6 @@ Después abrir los notebooks en VS Code (kernel `.venv`) y ejecutarlos en orden 
 - [x] Actividad 0 — Inicio y registro
 - [x] Unidad I — Planeación del proyecto
 - [x] Unidad II — Preparación de datos (notebooks 01–03 y Data Mart probado en SQL Server)
-- [ ] Unidad III — Análisis supervisado (modelos funcionando; falta informe)
-- [ ] Unidad IV — Análisis no supervisado
-- [ ] Unidad V — Presentación y visualización
+- [x] Unidad III — Análisis supervisado (regresión y clasificación con entrenamiento/prueba)
+- [x] Unidad IV — Análisis no supervisado (K-Means + PCA)
+- [ ] Unidad V — Dashboard en Power BI (plantilla, tema y vistas listas)

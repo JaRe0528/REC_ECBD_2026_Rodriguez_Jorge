@@ -9,6 +9,9 @@ USE DM_Abalone;
 GO
 
 TRUNCATE TABLE dbo.Stg_Abalone;
+-- Si ya existen resultados de modelos (script 04), se borran primero por las llaves foráneas
+IF OBJECT_ID('dbo.Res_Cluster', 'U')    IS NOT NULL DELETE FROM dbo.Res_Cluster;
+IF OBJECT_ID('dbo.Res_Prediccion', 'U') IS NOT NULL DELETE FROM dbo.Res_Prediccion;
 DELETE FROM dbo.Fact_Abulon;
 
 -- 1) Cargar el CSV limpio a la tabla staging

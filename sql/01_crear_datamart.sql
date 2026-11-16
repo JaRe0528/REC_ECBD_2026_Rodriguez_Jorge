@@ -17,6 +17,8 @@ USE DM_Abalone;
 GO
 
 -- Se borran en orden inverso por las llaves foráneas
+IF OBJECT_ID('dbo.Res_Cluster', 'U')    IS NOT NULL DROP TABLE dbo.Res_Cluster;     -- resultados de modelos (script 04)
+IF OBJECT_ID('dbo.Res_Prediccion', 'U') IS NOT NULL DROP TABLE dbo.Res_Prediccion;
 IF OBJECT_ID('dbo.Fact_Abulon', 'U')    IS NOT NULL DROP TABLE dbo.Fact_Abulon;
 IF OBJECT_ID('dbo.Dim_Sexo', 'U')       IS NOT NULL DROP TABLE dbo.Dim_Sexo;
 IF OBJECT_ID('dbo.Dim_Grupo_Edad', 'U') IS NOT NULL DROP TABLE dbo.Dim_Grupo_Edad;

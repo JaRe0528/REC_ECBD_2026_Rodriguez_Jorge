@@ -73,7 +73,9 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 |---|---|
 | `sql/04_cargar_resultados_modelos.sql` | Carga los resultados de los modelos (`Res_Cluster`, `Res_Prediccion`) al Data Warehouse |
 | `sql/05_vistas_datamart.sql` | **Data Mart** como vistas: `vw_DM_Abalone`, `vw_DM_Resumen_Perfil`, `vw_DM_Desempeno_Modelos` |
-| `dashboard/` | Plantilla de fondo, tema de colores y archivo de Power BI |
+| `dashboard/` | Plantilla de fondo, tema de colores, archivo de Power BI y captura del dashboard |
+
+![Dashboard](dashboard/captura_dashboard.png)
 
 **Orden de ejecución completo:** notebooks 01 → 07, luego en SSMS los scripts SQL 01 → 05, y por último Power BI conectado a `localhost\SQLEXPRESS` → `DM_Abalone`.
 
@@ -101,4 +103,4 @@ Después abrir los notebooks en VS Code (kernel `.venv`) y ejecutarlos en orden 
 - [x] Unidad II — Preparación de datos (notebooks 01–03 y Data Mart probado en SQL Server)
 - [x] Unidad III — Análisis supervisado (regresión y clasificación con entrenamiento/prueba)
 - [x] Unidad IV — Análisis no supervisado (K-Means + PCA)
-- [ ] Unidad V — Dashboard en Power BI (plantilla, tema y vistas listas)
+- [x] Unidad V — Dashboard en Power BI conectado al Data Mart de SQL Server

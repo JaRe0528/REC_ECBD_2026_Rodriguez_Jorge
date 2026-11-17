@@ -1,6 +1,6 @@
 # Dashboard en Power BI
 
-Conecta Power BI a la base de datos **DM_Abalone** de SQL Server y usa las vistas del Data Mart (`sql/05_vistas_datamart.sql`).
+Conecta Power BI a la base de datos **DM_Abalone** de SQL Server y usa las vistas del Data Mart (`sql/02_vistas_datamart.sql`). Los datos los carga el ETL automático (`src/etl_abalone.py`); después de cada ejecución del ETL, en Power BI da clic en **Inicio → Actualizar**..
 
 | Archivo | Uso |
 |---|---|
@@ -20,3 +20,4 @@ Conecta Power BI a la base de datos **DM_Abalone** de SQL Server y usa las vista
 | Abulones por grupo de edad | Columnas | Eje `Grupo_Edad`, valor recuento de `ID_Abulon` |
 | Medidas promedio por perfil | Columnas agrupadas | Eje `Perfil_Morfologico`, promedios de `Longitud_mm`, `Peso_Total_g`, `Peso_Concha_g` |
 | Edad promedio por sexo | Barras | Eje `Sexo`, promedio de `Edad_Anios` |
+| Filtro por mes (segmentación) | Segmentación | `Nombre_Mes` u `Anio_Mes` (dimensión de tiempo) |

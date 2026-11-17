@@ -42,9 +42,7 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 | `notebooks/01_carga_y_diccionario.ipynb` | Carga del dataset y diccionario de datos (`docs/diccionario_datos.csv`) |
 | `notebooks/02_analisis_exploratorio.ipynb` | EDA: estadísticas, gráficas (`docs/figuras/`), atípicos y correlaciones |
 | `notebooks/03_limpieza_etl.ipynb` | ETL: elimina 8 registros físicamente imposibles, crea unidades reales, `Edad_anios`, `Grupo_Edad` e ID → `data/processed/abalone_limpio.csv` (4,169 registros) |
-| `sql/01_crear_datamart.sql` | Crea el Data Mart `DM_Abalone` (esquema estrella: `Dim_Sexo`, `Dim_Grupo_Edad`, `Fact_Abulon`) |
-| `sql/02_cargar_datamart.sql` | Carga el CSV procesado al Data Mart |
-| `sql/03_consultas_validacion.sql` | Consultas de validación |
+| Data Warehouse y ETL | Ver la sección **Data Warehouse, ETL automático y Data Mart** |
 | `docs/figuras/11_*`, `12_*`, `13_*` | Evidencias de ejecución en SQL Server 2025 Express (4,169 registros cargados en `Fact_Abulon`) |
 
 ## Unidad III — Análisis supervisado
@@ -68,17 +66,21 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 
 **Resultados:** 3 perfiles morfológicos (silueta 0.44). Sin conocer la edad, el perfil Pequeño es 71% infantes y el Grande 58% maduros. PC1 (tamaño general) concentra el 92.5% de la información de las 7 medidas.
 
-## Data Mart y dashboard
+## Data Warehouse, ETL automático y Data Mart
 | Archivo | Contenido |
 |---|---|
-| `sql/04_cargar_resultados_modelos.sql` | Carga los resultados de los modelos (`Res_Cluster`, `Res_Prediccion`) al Data Warehouse |
-| `docs/figuras/21_diagrama_esquema_estrella.png` | Diagrama del esquema estrella en SQL Server (Stg_Abalone es la tabla temporal del ETL, sin relaciones) |
-| `sql/05_vistas_datamart.sql` | **Data Mart** como vistas: `vw_DM_Abalone`, `vw_DM_Resumen_Perfil`, `vw_DM_Desempeno_Modelos` |
-| `dashboard/` | Plantilla de fondo, tema de colores, archivo de Power BI y captura del dashboard |
+| `sql/01_crear_datamart.sql` | Crea el **esquema estrella**: `Dim_Tiempo`, `Dim_Sexo`, `Dim_Grupo_Edad`, `Fact_Abulon`, tablas de resultados (`Res_Cluster`, `Res_Prediccion`, `Res_Metrica_Modelo`), bitácora `Log_ETL` y el procedimiento **`sp_Generar_Dim_Tiempo`** |
+| `src/etl_abalone.py` | **ETL automático con carga FULL**: extrae de `data/raw`, transforma, aplica los modelos y carga todo en SQL Server |
+| `sql/02_vistas_datamart.sql` | **Data Mart** como vistas: `vw_DM_Abalone`, `vw_DM_Resumen_Perfil`, `vw_DM_Desempeno_Modelos`, `vw_DM_Comparacion_Modelos` |
+| `sql/03_consultas_validacion.sql` | Conteos, bitácora del ETL y consultas por mes |
+| `docs/figuras/21_diagrama_esquema_estrella.png` | Diagrama del esquema estrella |
+| `dashboard/` | Dashboard de Power BI conectado a las vistas del Data Mart |
+
+**Orden de ejecución:** notebooks 01 → 07 (exploración y entrenamiento de modelos) → `sql/01` (una vez) → `python src/etl_abalone.py` → `sql/02` → Power BI (Inicio → Actualizar).
+
+> El dataset original no tiene fechas, por lo que el ETL asigna a cada abulón una **fecha de muestreo simulada** (días hábiles de enero a diciembre de 2026, con semilla fija). `Dim_Tiempo` se genera con un procedimiento almacenado de 2026 a 2035.
 
 ![Dashboard](dashboard/captura_dashboard.png)
-
-**Orden de ejecución completo:** notebooks 01 → 07, luego en SSMS los scripts SQL 01 → 05, y por último Power BI conectado a `localhost\SQLEXPRESS` → `DM_Abalone`.
 
 ## Cómo ejecutar el proyecto
 ```
@@ -86,7 +88,7 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 ```
-Después abrir los notebooks en VS Code (kernel `.venv`) y ejecutarlos en orden 01 → 02 → 03. Para el Data Mart, ejecutar los scripts de `sql/` en SQL Server Management Studio en orden 01 → 02 → 03.
+Después ejecutar los notebooks en orden (kernel `.venv`), crear el Data Warehouse con `sql/01_crear_datamart.sql` en SSMS, correr el ETL con `python src/etl_abalone.py` y crear las vistas con `sql/02_vistas_datamart.sql`.
 
 ## Estructura del repositorio
 - `data/raw/` — datos originales sin modificar

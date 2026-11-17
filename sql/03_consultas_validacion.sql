@@ -1,31 +1,37 @@
 /* =====================================================================
-   Unidad II - Consultas de validación y exploración del Data Mart
+   Script 03 - Consultas de validación del Data Warehouse
+   Ejecutar después del ETL para comprobar que la carga quedó bien.
    ===================================================================== */
 USE DM_Abalone;
 GO
 
--- Registros por sexo
-SELECT d.Descripcion AS Sexo, COUNT(*) AS Total,
-       CAST(AVG(f.Rings * 1.0) AS DECIMAL(5,2)) AS Promedio_Rings
-FROM dbo.Fact_Abulon f
-JOIN dbo.Dim_Sexo d ON d.ID_Sexo = f.ID_Sexo
-GROUP BY d.Descripcion;
+-- 1) Conteo de cada tabla (después de cada carga full debe ser IGUAL)
+SELECT 'Dim_Tiempo' AS Tabla, COUNT(*) AS Registros FROM dbo.Dim_Tiempo
+UNION ALL SELECT 'Dim_Sexo',           COUNT(*) FROM dbo.Dim_Sexo
+UNION ALL SELECT 'Dim_Grupo_Edad',     COUNT(*) FROM dbo.Dim_Grupo_Edad
+UNION ALL SELECT 'Fact_Abulon',        COUNT(*) FROM dbo.Fact_Abulon
+UNION ALL SELECT 'Res_Cluster',        COUNT(*) FROM dbo.Res_Cluster
+UNION ALL SELECT 'Res_Prediccion',     COUNT(*) FROM dbo.Res_Prediccion
+UNION ALL SELECT 'Res_Metrica_Modelo', COUNT(*) FROM dbo.Res_Metrica_Modelo;
 
--- Registros por grupo de edad (deben estar balanceados, ~33% cada uno)
-SELECT g.Grupo, COUNT(*) AS Total,
-       CAST(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM dbo.Fact_Abulon) AS DECIMAL(5,1)) AS Porcentaje
-FROM dbo.Fact_Abulon f
-JOIN dbo.Dim_Grupo_Edad g ON g.ID_Grupo_Edad = f.ID_Grupo_Edad
-GROUP BY g.Grupo, g.ID_Grupo_Edad
-ORDER BY g.ID_Grupo_Edad;
+-- 2) Bitácora del ETL: cada ejecución queda registrada
+SELECT * FROM dbo.Log_ETL ORDER BY ID_Ejecucion DESC;
 
--- Medidas promedio por sexo y grupo de edad
-SELECT d.Descripcion AS Sexo, g.Grupo,
-       CAST(AVG(f.Longitud_mm)   AS DECIMAL(6,1)) AS Longitud_Prom_mm,
-       CAST(AVG(f.Peso_Total_g)  AS DECIMAL(7,1)) AS Peso_Prom_g,
-       CAST(AVG(f.Peso_Concha_g) AS DECIMAL(7,1)) AS Concha_Prom_g
+-- 3) Abulones muestreados por mes (uso de la dimensión de tiempo)
+SELECT t.Anio_Mes, t.Nombre_Mes, COUNT(*) AS Abulones,
+       CAST(AVG(f.Edad_Anios) AS DECIMAL(5,2)) AS Edad_Promedio
 FROM dbo.Fact_Abulon f
-JOIN dbo.Dim_Sexo d       ON d.ID_Sexo = f.ID_Sexo
+JOIN dbo.Dim_Tiempo t ON t.ID_Tiempo = f.ID_Tiempo
+GROUP BY t.Anio_Mes, t.Nombre_Mes
+ORDER BY t.Anio_Mes;
+
+-- 4) Registros por sexo y grupo de edad
+SELECT s.Descripcion AS Sexo, g.Grupo, COUNT(*) AS Total
+FROM dbo.Fact_Abulon f
+JOIN dbo.Dim_Sexo s       ON s.ID_Sexo = f.ID_Sexo
 JOIN dbo.Dim_Grupo_Edad g ON g.ID_Grupo_Edad = f.ID_Grupo_Edad
-GROUP BY d.Descripcion, g.Grupo, g.ID_Grupo_Edad
-ORDER BY d.Descripcion, g.ID_Grupo_Edad;
+GROUP BY s.Descripcion, g.Grupo, g.ID_Grupo_Edad
+ORDER BY s.Descripcion, g.ID_Grupo_Edad;
+
+-- 5) Desempeño de todos los modelos (guardado por el ETL)
+SELECT * FROM dbo.vw_DM_Comparacion_Modelos ORDER BY Tipo_Analisis, Modelo, Metrica;

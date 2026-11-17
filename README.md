@@ -62,6 +62,7 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 | `notebooks/07_predicciones_dashboard.ipynb` | Predicciones de los modelos por abulón (marcando Entrenamiento / Prueba) para el dashboard |
 | `data/processed/abalone_clusters.csv`, `data/processed/abalone_predicciones.csv` | Resultados que se cargan al Data Warehouse |
 | `docs/metricas_clustering.csv`, `docs/perfiles_clusters.csv` | Métricas y perfiles |
+| `notebooks/08_funciones_de_los_modelos.ipynb` | **Qué modelo se usó y la función que generó cada uno**: ecuación de la regresión lineal (y = mx + b y múltiple), reglas del árbol, coeficientes de la regresión logística, centros de K-Means y ecuación de PC1 |
 | `modelos/kmeans_pca.joblib` | Modelo K-Means + PCA guardado |
 
 **Resultados:** 3 perfiles morfológicos (silueta 0.44). Sin conocer la edad, el perfil Pequeño es 71% infantes y el Grande 58% maduros. PC1 (tamaño general) concentra el 92.5% de la información de las 7 medidas.

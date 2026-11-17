@@ -72,6 +72,7 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 | Archivo | Contenido |
 |---|---|
 | `sql/04_cargar_resultados_modelos.sql` | Carga los resultados de los modelos (`Res_Cluster`, `Res_Prediccion`) al Data Warehouse |
+| `docs/figuras/21_diagrama_esquema_estrella.png` | Diagrama del esquema estrella en SQL Server (Stg_Abalone es la tabla temporal del ETL, sin relaciones) |
 | `sql/05_vistas_datamart.sql` | **Data Mart** como vistas: `vw_DM_Abalone`, `vw_DM_Resumen_Perfil`, `vw_DM_Desempeno_Modelos` |
 | `dashboard/` | Plantilla de fondo, tema de colores, archivo de Power BI y captura del dashboard |
 

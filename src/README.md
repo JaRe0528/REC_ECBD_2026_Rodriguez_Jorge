@@ -3,6 +3,7 @@
 | Script | Qué hace |
 |---|---|
 | `etl_abalone.py` | **ETL automático** con **carga FULL** al Data Warehouse `DM_Abalone` de SQL Server |
+| `ejecutar_etl.bat` | Ejecuta el ETL; se programa en el Programador de tareas de Windows (diario, 3:00 a.m.) |
 
 ## Cómo ejecutar el ETL
 ```
@@ -16,3 +17,9 @@ python src/etl_abalone.py
 Ejecutarlo varias veces deja el Data Warehouse **igual** (no se duplican datos).
 
 Opciones: `--servidor`, `--base`, y `--sin-cargar` (solo extrae y transforma).
+
+## Ejecución automática programada
+`ejecutar_etl.bat` corre el ETL con el Python del entorno `.venv` y guarda la salida en `logs/etl.log`.
+Está programado en el **Programador de tareas de Windows** para ejecutarse **todos los días a las 3:00 a.m.** (tarea `ETL_Abalone`).
+
+> SQL Server Express no incluye el Agente SQL Server, por eso no se usa un *job* de SQL Server. En Linux o Mac el equivalente sería una línea en `cron`, por ejemplo: `0 3 * * * cd /ruta/proyecto && .venv/bin/python src/etl_abalone.py`.

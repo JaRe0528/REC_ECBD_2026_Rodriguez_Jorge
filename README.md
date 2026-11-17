@@ -71,6 +71,7 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 |---|---|
 | `sql/01_crear_datamart.sql` | Crea el **esquema estrella**: `Dim_Tiempo`, `Dim_Sexo`, `Dim_Grupo_Edad`, `Fact_Abulon`, tablas de resultados (`Res_Cluster`, `Res_Prediccion`, `Res_Metrica_Modelo`), bitácora `Log_ETL` y el procedimiento **`sp_Generar_Dim_Tiempo`** |
 | `src/etl_abalone.py` | **ETL automático con carga FULL**: extrae de `data/raw`, transforma, aplica los modelos y carga todo en SQL Server |
+| `src/ejecutar_etl.bat` | Ejecuta el ETL; programado en el **Programador de tareas de Windows** todos los días a las 3:00 a.m. (bitácora en `logs/etl.log` y en la tabla `Log_ETL`) |
 | `sql/02_vistas_datamart.sql` | **Data Mart** como vistas: `vw_DM_Abalone`, `vw_DM_Resumen_Perfil`, `vw_DM_Desempeno_Modelos`, `vw_DM_Comparacion_Modelos` |
 | `sql/03_consultas_validacion.sql` | Conteos, bitácora del ETL y consultas por mes |
 | `docs/figuras/21_diagrama_esquema_estrella.png` | Diagrama del esquema estrella |

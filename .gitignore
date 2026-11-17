@@ -8,3 +8,6 @@ __pycache__/
 # Archivos del sistema
 desktop.ini
 Thumbs.db
+
+# Bitacoras locales del ETL programado
+logs/

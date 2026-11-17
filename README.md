@@ -74,6 +74,7 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 | `src/ejecutar_etl.bat` | Ejecuta el ETL; programado en el **Programador de tareas de Windows** todos los días a las 3:00 a.m. (bitácora en `logs/etl.log` y en la tabla `Log_ETL`) |
 | `sql/02_vistas_datamart.sql` | **Data Mart** como vistas: `vw_DM_Abalone`, `vw_DM_Resumen_Perfil`, `vw_DM_Desempeno_Modelos`, `vw_DM_Comparacion_Modelos` |
 | `sql/03_consultas_validacion.sql` | Conteos, bitácora del ETL y consultas por mes |
+| `sql/04_vaciar_datawarehouse.sql` | Deja vacías todas las tablas (demostración: vaciar → ejecutar ETL → volver a ejecutar ETL) |
 | `docs/figuras/21_diagrama_esquema_estrella.png` | Diagrama del esquema estrella |
 | `dashboard/` | Dashboard de Power BI conectado a las vistas del Data Mart |
 

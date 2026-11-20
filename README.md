@@ -76,7 +76,7 @@ Actualmente la edad de un abulón se determina cortando su concha, tiñéndola y
 | `sql/02_vistas_datamart.sql` | **Data Mart** como vistas: `vw_DM_Abalone`, `vw_DM_Resumen_Perfil`, `vw_DM_Desempeno_Modelos`, `vw_DM_Comparacion_Modelos` |
 | `sql/03_consultas_validacion.sql` | Conteos, bitácora del ETL y consultas por mes |
 | `sql/04_vaciar_datawarehouse.sql` | Deja vacías todas las tablas (demostración: vaciar → ejecutar ETL → volver a ejecutar ETL) |
-| `docs/figuras/21_diagrama_esquema_estrella.png` | Diagrama del esquema estrella |
+| `docs/figuras/28_esquema_estrella_final.png` | Diagrama del esquema estrella final (con Dim_Tiempo y tablas de resultados) |
 | `dashboard/` | Dashboard de Power BI conectado a las vistas del Data Mart |
 
 **Orden de ejecución:** notebooks 01 → 07 (exploración y entrenamiento de modelos) → `sql/01` (una vez) → `python src/etl_abalone.py` → `sql/02` → Power BI (Inicio → Actualizar).
@@ -92,6 +92,27 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 Después ejecutar los notebooks en orden (kernel `.venv`), crear el Data Warehouse con `sql/01_crear_datamart.sql` en SSMS, correr el ETL con `python src/etl_abalone.py` y crear las vistas con `sql/02_vistas_datamart.sql`.
+
+## Resultados principales
+| Análisis | Modelo final | Resultado (datos de prueba) |
+|---|---|---|
+| Regresión (anillos) | Random Forest Regressor (200 árboles, optimizado con GridSearchCV) | MAE = 1.49 anillos · R² = 0.61 |
+| Clasificación (Joven/Adulto/Maduro) | Random Forest Classifier (optimizado) | Exactitud = 64.1 % · F1 = 0.64 |
+| Agrupamiento | K-Means (k = 3) + PCA | Silueta = 0.44 · PC1 = 92.5 % de la varianza |
+
+## Conclusiones
+1. Las medidas físicas **sí permiten estimar la edad** del abulón con un error promedio de **1.5 años** y clasificar su etapa de crecimiento con **64 %** de exactitud, sin sacrificarlo.
+2. El **peso de la concha** es la variable más relacionada con la edad (correlación 0.63; 42 % de importancia).
+3. La precisión baja en abulones viejos: después de la madurez el crecimiento se detiene y el tamaño deja de reflejar la edad.
+4. K-Means encontró **tres perfiles morfológicos** (Pequeño, Mediano, Grande) que coinciden con la madurez sin conocer la edad; PCA mostró que el tamaño general resume el 92.5 % de la información.
+5. La arquitectura **ETL automático → Data Warehouse → Data Mart → Power BI** permite actualizar todo el análisis con un solo comando y de forma programada.
+
+## Recomendaciones
+- **Granjas de acuicultura:** usar el modelo como prueba rápida y no destructiva para decidir la cosecha; confirmar al microscopio solo los casos dudosos.
+- **Muestreo:** registrar siempre el peso de la concha, la altura y el sexo.
+- **Manejo pesquero:** devolver al mar los ejemplares del perfil Pequeño, que son mayoritariamente juveniles.
+- **Mejora del modelo:** agregar variables ambientales y fechas reales de muestreo, y probar Gradient Boosting.
+- **Operación:** cambiar a carga incremental cuando el volumen de datos crezca.
 
 ## Estructura del repositorio
 - `data/raw/` — datos originales sin modificar
@@ -110,3 +131,4 @@ Después ejecutar los notebooks en orden (kernel `.venv`), crear el Data Warehou
 - [x] Unidad III — Análisis supervisado (regresión y clasificación con entrenamiento/prueba)
 - [x] Unidad IV — Análisis no supervisado (K-Means + PCA)
 - [x] Unidad V — Dashboard en Power BI conectado al Data Mart de SQL Server
+- [x] Informe final, conclusiones y recomendaciones (`docs/Rodriguez_Enriquez_Jorge_Alberto_Informe_Final_Proyecto_Integrador.pdf`)

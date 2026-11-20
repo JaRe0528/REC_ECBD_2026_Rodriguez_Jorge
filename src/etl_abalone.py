@@ -268,11 +268,11 @@ def cargar(df, df_met, servidor, base):
         raise
 
 
-def registrar_log(con, inicio, estado, leidos, descartados, cargados, mensaje):
+def registrar_log(con, inicio, estado, leidos, descartados, cargados, mensaje, tipo="FULL"):
     cur = con.cursor()
     cur.execute("INSERT INTO dbo.Log_ETL (Fecha_Inicio, Fecha_Fin, Tipo_Carga, Registros_Leidos, "
                 "Registros_Descartados, Registros_Cargados, Estado, Mensaje) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
-                inicio or datetime.now(), datetime.now(), "FULL", leidos, descartados, cargados, estado, mensaje)
+                inicio or datetime.now(), datetime.now(), tipo, leidos, descartados, cargados, estado, mensaje)
     con.commit()
 
 
@@ -290,7 +290,7 @@ def vaciar(servidor, base):
     except Exception:
         con.rollback()
         raise
-    registrar_log(con, datetime.now(), "OK", None, None, 0, "Vaciado del Data Warehouse (demostración)")
+    registrar_log(con, datetime.now(), "OK", None, None, 0, "Vaciado del Data Warehouse (demostración)", tipo="VACIADO")
     validar(con)
     con.close()
     print("\nData Warehouse VACÍO. Para volver a llenarlo:  python src/etl_abalone.py")

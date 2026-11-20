@@ -16,7 +16,7 @@ python src/etl_abalone.py
 
 Ejecutarlo varias veces deja el Data Warehouse **igual** (no se duplican datos).
 
-Opciones: `--servidor`, `--base`, y `--sin-cargar` (solo extrae y transforma).
+Opciones: `--vaciar` (deja vacías todas las tablas, para la demostración), `--sin-cargar` (solo extrae y transforma), `--servidor` y `--base`.
 
 ## Ejecución automática programada
 `ejecutar_etl.bat` corre el ETL con el Python del entorno `.venv` y guarda la salida en `logs/etl.log`.

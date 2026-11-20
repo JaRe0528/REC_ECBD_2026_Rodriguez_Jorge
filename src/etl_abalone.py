@@ -19,6 +19,8 @@ Si se ejecuta dos o más veces, el Data Warehouse queda IGUAL (no se duplican
 datos). Cada ejecución queda registrada en la tabla dbo.Log_ETL.
 
 Requisito previo: haber creado las tablas con sql/01_crear_datamart.sql
+
+Para vaciar todas las tablas (demostración):  python src/etl_abalone.py --vaciar
 """
 
 import argparse
@@ -274,6 +276,26 @@ def registrar_log(con, inicio, estado, leidos, descartados, cargados, mensaje):
     con.commit()
 
 
+def vaciar(servidor, base):
+    """Deja vacías todas las tablas del Data Warehouse (para la demostración)."""
+    paso("VACIAR: borrando todas las tablas del Data Warehouse")
+    con, _ = conectar(servidor, base)
+    cur = con.cursor()
+    try:
+        for tabla in ["Res_Cluster", "Res_Prediccion", "Res_Metrica_Modelo",
+                      "Fact_Abulon", "Dim_Sexo", "Dim_Grupo_Edad", "Dim_Tiempo"]:
+            cur.execute(f"DELETE FROM dbo.{tabla};")
+            print(f"   DELETE dbo.{tabla:<20} ({cur.rowcount} filas borradas)")
+        con.commit()
+    except Exception:
+        con.rollback()
+        raise
+    registrar_log(con, datetime.now(), "OK", None, None, 0, "Vaciado del Data Warehouse (demostración)")
+    validar(con)
+    con.close()
+    print("\nData Warehouse VACÍO. Para volver a llenarlo:  python src/etl_abalone.py")
+
+
 def validar(con):
     paso("VALIDAR: conteo de registros en el Data Warehouse")
     cur = con.cursor()
@@ -288,9 +310,15 @@ def main():
     p = argparse.ArgumentParser(description="ETL Abalone -> SQL Server (carga full)")
     p.add_argument("--servidor", default=r"localhost\SQLEXPRESS")
     p.add_argument("--base", default="DM_Abalone")
+    p.add_argument("--vaciar", action="store_true",
+                   help="Solo vacía todas las tablas del Data Warehouse (no carga nada)")
     p.add_argument("--sin-cargar", action="store_true",
                    help="Solo extrae y transforma (no se conecta a SQL Server)")
     args = p.parse_args()
+
+    if args.vaciar:
+        vaciar(args.servidor, args.base)
+        return
 
     inicio = datetime.now()
     t0 = time.time()

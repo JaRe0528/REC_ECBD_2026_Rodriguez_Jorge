@@ -50,6 +50,7 @@ COLUMNAS = ["Sex", "Length", "Diameter", "Height", "Whole_weight",
 MEDIDAS = COLUMNAS[1:8]
 PREDICTORAS = MEDIDAS + ["Sex"]
 SEMILLA = 42
+MIN_REGISTROS_METRICAS = 50   # mínimo para dividir en entrenamiento/prueba
 
 # Periodo de muestreo simulado (el dataset original no trae fechas)
 INICIO_MUESTREO, FIN_MUESTREO = "2026-01-05", "2026-12-18"
@@ -112,12 +113,22 @@ def transformar(df_raw):
     cla = joblib.load(RUTA_MOD / "clasificacion_random_forest.joblib")
     nos = joblib.load(RUTA_MOD / "kmeans_pca.joblib")
 
-    # Misma división entrenamiento/prueba que en los notebooks 04 y 05
-    _, X_test_reg = train_test_split(X, test_size=0.2, random_state=SEMILLA)
-    _, X_test_cla = train_test_split(X, test_size=0.2, random_state=SEMILLA,
-                                     stratify=df["Grupo_Edad"])
-    df["Conjunto_Regresion"] = np.where(df.index.isin(X_test_reg.index), "Prueba", "Entrenamiento")
-    df["Conjunto_Clasificacion"] = np.where(df.index.isin(X_test_cla.index), "Prueba", "Entrenamiento")
+    # Misma división entrenamiento/prueba que en los notebooks 04 y 05.
+    # Si el archivo trae muy pocos registros (por ejemplo, una prueba con 1 solo
+    # abulón) no se puede dividir: se cargan los datos igual, sin métricas nuevas.
+    hay_metricas = len(df) >= MIN_REGISTROS_METRICAS and df["Grupo_Edad"].value_counts().min() >= 5
+    if hay_metricas:
+        _, X_test_reg = train_test_split(X, test_size=0.2, random_state=SEMILLA)
+        _, X_test_cla = train_test_split(X, test_size=0.2, random_state=SEMILLA,
+                                         stratify=df["Grupo_Edad"])
+        df["Conjunto_Regresion"] = np.where(df.index.isin(X_test_reg.index), "Prueba", "Entrenamiento")
+        df["Conjunto_Clasificacion"] = np.where(df.index.isin(X_test_cla.index), "Prueba", "Entrenamiento")
+    else:
+        print(f"   AVISO: solo hay {len(df)} registro(s). Se cargan los datos y las predicciones,")
+        print("          pero no se recalculan métricas (se necesitan al menos "
+              f"{MIN_REGISTROS_METRICAS}).")
+        df["Conjunto_Regresion"] = "Sin dividir"
+        df["Conjunto_Clasificacion"] = "Sin dividir"
 
     df["Rings_Predicho"] = reg.predict(X).round(2)
     df["Edad_Predicha_Anios"] = (df["Rings_Predicho"] + 1.5).round(2)
@@ -134,7 +145,7 @@ def transformar(df_raw):
     # 5) Métricas de desempeño (solo con datos de PRUEBA)
     pr = df[df["Conjunto_Regresion"] == "Prueba"]
     pc = df[df["Conjunto_Clasificacion"] == "Prueba"]
-    metricas = [
+    metricas = [] if not hay_metricas else [
         ("Random Forest (regresión)", "Regresión", "MAE (anillos)", mean_absolute_error(pr["Rings"], pr["Rings_Predicho"]), 1),
         ("Random Forest (regresión)", "Regresión", "RMSE (anillos)", np.sqrt(mean_squared_error(pr["Rings"], pr["Rings_Predicho"])), 1),
         ("Random Forest (regresión)", "Regresión", "R2", r2_score(pr["Rings"], pr["Rings_Predicho"]), 1),
@@ -159,8 +170,9 @@ def transformar(df_raw):
                     metricas.append((fila["Modelo"], tipo, metrica, valor, 0))
     df_met = pd.DataFrame(metricas, columns=["Modelo", "Tipo_Analisis", "Metrica", "Valor", "Es_Modelo_Final"])
     df_met["Valor"] = df_met["Valor"].astype(float).round(3)
-    print(f"   MAE regresión: {metricas[0][3]:.3f}  |  Exactitud clasificación: {metricas[3][3]:.1f}%"
-          f"  |  Silueta K-Means: {metricas[5][3]:.3f}")
+    if hay_metricas:
+        print(f"   MAE regresión: {metricas[0][3]:.3f}  |  Exactitud clasificación: {metricas[3][3]:.1f}%"
+              f"  |  Silueta K-Means: {metricas[5][3]:.3f}")
 
     # Copia del resultado transformado (trazabilidad)
     RUTA_PROC.mkdir(parents=True, exist_ok=True)
